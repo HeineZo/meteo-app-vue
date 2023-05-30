@@ -1,7 +1,6 @@
 <script setup>
-import MainInfo from '../components/MainInfo.vue';
-import MoreInfoContainer from '../components/MoreInfoContainer.vue';
-
+import MainInfo from "../components/MainInfo.vue";
+import MoreInfoContainer from "../components/MoreInfoContainer.vue";
 </script>
 
 <template>
