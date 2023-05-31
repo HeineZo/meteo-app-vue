@@ -7,13 +7,14 @@ export const useWeatherDataStore = defineStore("weatherData", () => {
     const apiKey = import.meta.env.VITE_VUE_APP_API_KEY;
     const weatherData = ref({});
     const loading = ref(false);
-    const test = ref("test");
     const error = ref(null);
     const location = useRoute();
 
     const cityName = ref("");
     const weatherArray = ref([]);
     const temperature = ref(0);
+    const wind = ref({});
+    const humidity = ref(0);
 
     if (!apiKey) {
         throw new Error("Please add an API key to your .env file");
@@ -31,8 +32,8 @@ export const useWeatherDataStore = defineStore("weatherData", () => {
             cityName.value = weatherData.value.name;
             weatherArray.value = weatherData.value.weather[0];
             temperature.value = weatherData.value.main.temp.toFixed(0);
-
-            console.log(weatherArray.value);
+            wind.value = weatherData.value.wind;
+            humidity.value = weatherData.value.main.humidity;
         } catch (err) {
             error.value = err;
         } finally {
@@ -73,9 +74,10 @@ export const useWeatherDataStore = defineStore("weatherData", () => {
         error,
         fetchWeatherData,
         iconCodeToEmoji,
-        test,
         cityName,
         temperature,
-        weatherArray
+        weatherArray,
+        wind,
+        humidity
     };
 });
