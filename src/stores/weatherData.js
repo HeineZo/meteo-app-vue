@@ -12,8 +12,7 @@ export const useWeatherDataStore = defineStore("weatherData", () => {
     const location = useRoute();
 
     const cityName = ref("");
-    const weatherDescription = ref("");
-    const weatherIcon = ref("");
+    const weatherArray = ref([]);
     const temperature = ref(0);
 
     if (!apiKey) {
@@ -30,10 +29,10 @@ export const useWeatherDataStore = defineStore("weatherData", () => {
             );
             weatherData.value = await res.json();
             cityName.value = weatherData.value.name;
-            weatherDescription.value = weatherData.value.weather[0].description;
-            weatherIcon.value = weatherData.value.weather[0].icon;
+            weatherArray.value = weatherData.value.weather[0];
             temperature.value = weatherData.value.main.temp.toFixed(0);
-            console.log(weatherIcon.value);
+
+            console.log(weatherArray.value);
         } catch (err) {
             error.value = err;
         } finally {
@@ -76,8 +75,7 @@ export const useWeatherDataStore = defineStore("weatherData", () => {
         iconCodeToEmoji,
         test,
         cityName,
-        weatherDescription,
-        weatherIcon,
         temperature,
+        weatherArray
     };
 });
