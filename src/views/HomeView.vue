@@ -45,7 +45,7 @@ const { loadedOnce } = storeToRefs(weather);
 </style>
 <style scoped>
 .animate-rotate {
-  animation: rotate 10s linear infinite;
+  animation: rotate 120s linear infinite;
 }
 
 .animate-move-x {
