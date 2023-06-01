@@ -6,9 +6,11 @@ import router from "../router/index.js";
 export const useWeatherDataStore = defineStore("weatherData", () => {
     const apiKey = import.meta.env.VITE_VUE_APP_API_KEY;
     const weatherData = ref({});
+    const weatherDataHourly = ref({});
     const loading = ref(false);
     const error = ref(null);
     const location = useRoute();
+    const loadedOnce = ref(false);
 
     const cityName = ref("");
     const weatherArray = ref([]);
@@ -24,6 +26,7 @@ export const useWeatherDataStore = defineStore("weatherData", () => {
 
     const fetchWeatherData = async (city) => {
         loading.value = true;
+        loadedOnce.value = true;
         try {
             const res = await fetch(
                 `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=fr`
@@ -43,6 +46,18 @@ export const useWeatherDataStore = defineStore("weatherData", () => {
             }
         }
     };
+
+    const fetchWeatherDataHourly = async (city) => {
+        loading.value = true;
+        try {
+            const res = await fetch(`https://api.openweathermap.org/data/2.5/forecast/hourly?q=${city}&appid=${apiKey}&units=metric&lang=fr`);
+            weatherDataHourly.value = await res.json();
+            console.log(weatherDataHourly.value)
+        } catch (err) {
+            error.value = err;
+        }
+    };
+
 
     const iconCodeToEmoji = (iconCode) => {
         const codeMap = {
@@ -73,11 +88,13 @@ export const useWeatherDataStore = defineStore("weatherData", () => {
         loading,
         error,
         fetchWeatherData,
+        fetchWeatherDataHourly,
         iconCodeToEmoji,
         cityName,
         temperature,
         weatherArray,
         wind,
-        humidity
+        humidity,
+        loadedOnce,
     };
 });
