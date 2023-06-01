@@ -1,27 +1,25 @@
 <script setup>
 import Day from './Day.vue';
-const hourList = [
-  {"degrees": "20",
-  "icon": "sun",
-  "time": "10:00"
-  },
-  {"degrees": "23",
-  "icon": "sun",
-  "time": "11:00"
-  },
-  {"degrees": "25",
-  "icon": "sun",
-  "time": "12:00"
-  },
-  {"degrees": "26",
-  "icon": "sun",
-  "time": "13:00"
-  },
-  {"degrees": "27",
-  "icon": "sun",
-  "time": "14:00"
-  }
-]
+import { useWeatherDataStore } from '@/stores/weatherData';
+import { storeToRefs } from 'pinia';
+
+const weather = useWeatherDataStore();
+
+defineProps(['temp', 'time', 'icon'])
+
+// const { weatherDateHourly1, weatherDateHourly2, weatherDateHourly3, weatherDateHourly4, weatherDateHourly5 } = storeToRefs(weather);
+const { weatherDataHourlyArray } = storeToRefs(weather);
+
+const { iconCodeToEmoji } = weather
+
+const unixToHour = (unix) => {
+	const date = new Date(unix * 1000);
+	return date.toLocaleTimeString('fr-FR', {
+		hour: '2-digit',
+		minute: '2-digit',
+	});
+};
+
 </script>
 
 <template>
@@ -34,7 +32,9 @@ const hourList = [
         </RouterLink>
     </div>
     <div class="flex gap-5 overflow-x-auto overflow-y-hidden snap-x snap-proximity whitespace-nowrap">
-      <Day v-for="hour in hourList" :degrees="hour.degrees" :icon="hour.icon" :time="hour.time"/>
+      <!-- <Day v-for="hour in hourList" :temp="hour.temp" :icon="hour.icon" :time="hour.time"/> -->
+      <!-- <Day :temp="weatherDateHourly1.temp" :icon="iconCodeToEmoji(weatherDateHourly1.icon)" :time="weatherDateHourly1.dt"/> -->
+      <Day v-for="hour in weatherDataHourlyArray" :temp="hour.temp.toFixed(0)" :time="unixToHour(hour.time)" :icon="iconCodeToEmoji(hour.icon)"/>
     </div>
   </main>
 </template>

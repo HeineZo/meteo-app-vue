@@ -7,6 +7,10 @@ export const useWeatherDataStore = defineStore("weatherData", () => {
     const apiKey = import.meta.env.VITE_VUE_APP_API_KEY;
     const weatherData = ref({});
     const weatherDataHourly = ref({});
+
+    // const weatherDateHourly1 = ref({});
+    const weatherDataHourlyArray = ref([]);
+
     const loading = ref(false);
     const error = ref(null);
     const location = useRoute();
@@ -50,9 +54,39 @@ export const useWeatherDataStore = defineStore("weatherData", () => {
     const fetchWeatherDataHourly = async (city) => {
         loading.value = true;
         try {
-            const res = await fetch(`https://api.openweathermap.org/data/2.5/forecast/hourly?q=${city}&appid=${apiKey}&units=metric&lang=fr`);
+            const res = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric&lang=fr`);
             weatherDataHourly.value = await res.json();
-            console.log(weatherDataHourly.value)
+
+            for(let i = 0; i < 5; i++) {
+                let weatherDateHourly = ref({});
+                weatherDateHourly.value = {
+                    temp: weatherDataHourly.value.list[i].main.temp, 
+                    icon: weatherDataHourly.value.list[i].weather[0].icon,
+                    time: weatherDataHourly.value.list[i].dt, 
+                };
+                weatherDataHourlyArray.value.push(weatherDateHourly.value);
+            }
+            console.log(weatherDataHourlyArray.value);
+            // weatherDateHourly1.value = {
+            //     temp: weatherDataHourly.value.list[0].main.temp, 
+            //     icon: weatherDataHourly.value.list[0].weather[0].icon,
+            //     time: weatherDataHourly.value.list[0].dt_txt, 
+            // };
+            // weatherDateHourly2.value = {
+            //     temp: weatherDataHourly.value.list[1].main.temp,
+            //     icon: weatherDataHourly.value.list[1].weather[0].icon,
+            //     time: weatherDataHourly.value.list[1].dt_txt,
+            // };
+            // weatherDateHourly3.value = {
+            //     temp: weatherDataHourly.value.list[2].main.temp,
+            //     icon: weatherDataHourly.value.list[2].weather[0].icon,
+            //     time: weatherDataHourly.value.list[2].dt_txt,
+            // };
+            // weatherDateHourly4.value = {
+            //     temp: weatherDataHourly.value.list[3].main.temp,
+            //     icon: weatherDataHourly.value.list[3].weather[0].icon,
+            //     time: weatherDataHourly.value.list[3].dt_txt,
+            // };
         } catch (err) {
             error.value = err;
         }
@@ -85,6 +119,7 @@ export const useWeatherDataStore = defineStore("weatherData", () => {
 
     return {
         weatherData,
+        weatherDataHourly,
         loading,
         error,
         fetchWeatherData,
@@ -96,5 +131,11 @@ export const useWeatherDataStore = defineStore("weatherData", () => {
         wind,
         humidity,
         loadedOnce,
+        // weatherDateHourly1,
+        // weatherDateHourly2,
+        // weatherDateHourly3,
+        // weatherDateHourly4,
+        // weatherDateHourly5,
+        weatherDataHourlyArray
     };
 });

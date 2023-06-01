@@ -6,7 +6,6 @@ const weather = useWeatherDataStore();
 
 const { cityName, temperature, weatherArray, loading } = storeToRefs(weather);
 
-
 defineProps(['orientation'])
 </script>
 

@@ -46,6 +46,7 @@ const location = ref(useRoute());
               (event) => {
                 if (event.key === 'Enter') {
                   weather.fetchWeatherData(city);
+                  weather.fetchWeatherDataHourly(city);
                 }
               }
             " />

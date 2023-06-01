@@ -23,7 +23,7 @@ watch(wind, (newWind) => {
 });
 
 watch(humidity, (newHumidity) => {
-  console.log(newHumidity)
+//   console.log(newHumidity)
   infoList.value[1].value = `${newHumidity}%`;
 });
 
