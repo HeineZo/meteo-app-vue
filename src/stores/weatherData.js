@@ -6,10 +6,11 @@ import router from "../router/index.js";
 export const useWeatherDataStore = defineStore("weatherData", () => {
     const apiKey = import.meta.env.VITE_VUE_APP_API_KEY;
     const weatherData = ref({});
+    
     const weatherDataHourly = ref({});
-
-    // const weatherDateHourly1 = ref({});
     const weatherDataHourlyArray = ref([]);
+    const weatherDataWeekly = ref({});
+    const weatherDataWeeklyArray = ref([]);
 
     const loading = ref(false);
     const error = ref(null);
@@ -54,19 +55,44 @@ export const useWeatherDataStore = defineStore("weatherData", () => {
     };
 
     const fetchWeatherDataHourly = async (city) => {
+        weatherDataHourlyArray.value = [];
         loading.value = true;
         try {
             const res = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric&lang=fr`);
             weatherDataHourly.value = await res.json();
 
             for(let i = 0; i < 5; i++) {
-                let weatherDateHourly = ref({});
-                weatherDateHourly.value = {
+                let weatherHourly = ref({});
+                weatherHourly.value = {
                     temp: weatherDataHourly.value.list[i].main.temp, 
                     icon: weatherDataHourly.value.list[i].weather[0].icon,
                     time: weatherDataHourly.value.list[i].dt, 
                 };
-                weatherDataHourlyArray.value.push(weatherDateHourly.value);
+                weatherDataHourlyArray.value.push(weatherHourly.value);
+            }
+        } catch (err) {
+            error.value = err;
+        }
+    };
+
+    const fetchWeatherDataWeekly = async (city) => {
+        weatherDataWeeklyArray.value = [];
+        loading.value = true;
+        try {
+            const res = await fetch(`https://api.openweathermap.org/data/2.5/forecast/daily?q=${city}&appid=${apiKey}&units=metric&lang=fr`);
+            weatherDataWeekly.value = await res.json();
+            
+            for(let i = 0; i < 7; i++) {
+                let weatherWeekly = ref({});
+                let date = new Date(weatherDataWeekly.value.list[i].dt * 1000);
+                weatherWeekly.value = {
+                    day: i === 0 ? "Aujourd'hui" : date.toLocaleDateString('fr-FR', {weekday: 'long'}),
+                    icon: weatherDataWeekly.value.list[i].weather[0].icon,
+                    description: weatherDataWeekly.value.list[i].weather[0].description,
+                    temp: weatherDataWeekly.value.list[i].temp.day.toFixed(0), 
+                };
+                console.log(weatherWeekly.value)
+                weatherDataWeeklyArray.value.push(weatherWeekly.value);
             }
         } catch (err) {
             error.value = err;
@@ -101,10 +127,14 @@ export const useWeatherDataStore = defineStore("weatherData", () => {
     return {
         weatherData,
         weatherDataHourly,
+        weatherDataHourlyArray,
+        weatherDataWeeklyArray,
         loading,
+        loadedOnce,
         error,
         fetchWeatherData,
         fetchWeatherDataHourly,
+        fetchWeatherDataWeekly,
         iconCodeToEmoji,
         cityName,
         temperature,
@@ -112,7 +142,5 @@ export const useWeatherDataStore = defineStore("weatherData", () => {
         wind,
         humidity,
         sun,
-        loadedOnce,
-        weatherDataHourlyArray
     };
 });

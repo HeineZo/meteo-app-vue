@@ -47,11 +47,12 @@ const location = ref(useRoute());
                 if (event.key === 'Enter') {
                   weather.fetchWeatherData(city);
                   weather.fetchWeatherDataHourly(city);
+                  weather.fetchWeatherDataWeekly(city);
                 }
               }
             " />
           <button id="search-button" class="border-none focus:outline-none absolute px-2 py-1.5 rounded-full right-3"
-            @click="weather.fetchWeatherData(city); weather.fetchWeatherDataHourly(city);">
+            @click="weather.fetchWeatherData(city); weather.fetchWeatherDataHourly(city); weather.fetchWeatherDataWeekly(city);">
             <font-awesome-icon icon="fa-solid fa-magnifying-glass" class="text-gray-400" />
           </button>
         </div>

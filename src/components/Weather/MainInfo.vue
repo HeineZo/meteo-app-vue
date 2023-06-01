@@ -14,7 +14,7 @@ defineProps(['orientation'])
     <i id="loading-icon" class="fa-solid fa-circle-notch animate-spin text-xl text-primary-500"></i>
   </div>
   <div v-else>
-    <main class="flex items-center justify-center gap-10 w-1/2" v-if="orientation === 'horizontal'">
+    <main class="flex items-center justify-center gap-10" v-if="orientation === 'horizontal'">
       <img width="200" class="my-5"
         :src="`https://cdn.jsdelivr.net/gh/mkabumattar/fluentui-emoji@latest/icons/modern/${weather.iconCodeToEmoji(weatherArray.icon)}.svg`" />
       <div>

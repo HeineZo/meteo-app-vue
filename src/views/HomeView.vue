@@ -17,7 +17,11 @@ const { loadedOnce } = storeToRefs(weather);
     <MoreInfoContainer />
     <DayContainer />
   </main>
-  <div v-else>
-    <h1>Recherchez un emplacement</h1>
-  </div>
+  <div id="welcome" class="w-full h-full flex flex-col items-center justify-center gap-5" v-else>
+				<img src="https://cdn.jsdelivr.net/gh/mkabumattar/fluentui-emoji@latest/icons/modern/sun-behind-small-cloud.svg"
+					width="150" />
+				<h1 class="text-3xl font-bold text-center tracking-tight text-gray-900" id="main-title">
+					Recherchez un emplacement
+				</h1>
+			</div>
 </template>
