@@ -21,6 +21,7 @@ export const useWeatherDataStore = defineStore("weatherData", () => {
     const temperature = ref(0);
     const wind = ref({});
     const humidity = ref(0);
+    const sun = ref({})
 
     if (!apiKey) {
         throw new Error("Please add an API key to your .env file");
@@ -41,6 +42,7 @@ export const useWeatherDataStore = defineStore("weatherData", () => {
             temperature.value = weatherData.value.main.temp.toFixed(0);
             wind.value = weatherData.value.wind;
             humidity.value = weatherData.value.main.humidity;
+            sun.value = {sunrise: weatherData.value.sys.sunrise, sunset: weatherData.value.sys.sunset};
         } catch (err) {
             error.value = err;
         } finally {
@@ -66,27 +68,6 @@ export const useWeatherDataStore = defineStore("weatherData", () => {
                 };
                 weatherDataHourlyArray.value.push(weatherDateHourly.value);
             }
-            console.log(weatherDataHourlyArray.value);
-            // weatherDateHourly1.value = {
-            //     temp: weatherDataHourly.value.list[0].main.temp, 
-            //     icon: weatherDataHourly.value.list[0].weather[0].icon,
-            //     time: weatherDataHourly.value.list[0].dt_txt, 
-            // };
-            // weatherDateHourly2.value = {
-            //     temp: weatherDataHourly.value.list[1].main.temp,
-            //     icon: weatherDataHourly.value.list[1].weather[0].icon,
-            //     time: weatherDataHourly.value.list[1].dt_txt,
-            // };
-            // weatherDateHourly3.value = {
-            //     temp: weatherDataHourly.value.list[2].main.temp,
-            //     icon: weatherDataHourly.value.list[2].weather[0].icon,
-            //     time: weatherDataHourly.value.list[2].dt_txt,
-            // };
-            // weatherDateHourly4.value = {
-            //     temp: weatherDataHourly.value.list[3].main.temp,
-            //     icon: weatherDataHourly.value.list[3].weather[0].icon,
-            //     time: weatherDataHourly.value.list[3].dt_txt,
-            // };
         } catch (err) {
             error.value = err;
         }
@@ -130,12 +111,8 @@ export const useWeatherDataStore = defineStore("weatherData", () => {
         weatherArray,
         wind,
         humidity,
+        sun,
         loadedOnce,
-        // weatherDateHourly1,
-        // weatherDateHourly2,
-        // weatherDateHourly3,
-        // weatherDateHourly4,
-        // weatherDateHourly5,
         weatherDataHourlyArray
     };
 });
