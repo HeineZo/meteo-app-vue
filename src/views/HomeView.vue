@@ -12,12 +12,12 @@ const { loadedOnce } = storeToRefs(weather);
 </script>
 
 <template>
-  <main v-if=loadedOnce class="w-full flex items-center justify-center flex-col gap-10 mt-20 px-5">
+  <main v-if=loadedOnce class="w-full flex items-center justify-center flex-col mt-20 px-5">
     <MainInfo title="Météo" icon="sun" degrees="20" weather="Ensoleillé" />
     <MoreInfoContainer />
     <DayContainer />
   </main>
-  <main v-else class="w-full mt-20 px-5 flex items-center justify-center" id="welcome">
+  <main v-else class="w-full px-5 flex items-center justify-center" id="welcome">
     <div class="h-full w-1/2 flex flex-col justify-center items-center lg:relative absolute">
       <img width="300" class="animate-rotate"
         src="https://cdn.jsdelivr.net/gh/mkabumattar/fluentui-emoji@latest/icons/modern/sun.svg" />

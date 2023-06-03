@@ -7,7 +7,7 @@ import Footer from './components/Footer.vue';
 <template>
 	<Navbar />
 	<Transition name="fade">
-		<RouterView />
+		<RouterView class="mt-10" />
 	</Transition>
   <Footer></Footer>
 </template>
