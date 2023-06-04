@@ -13,8 +13,8 @@ const { loadedOnce } = storeToRefs(weather);
 
 <template>
   <main v-if=loadedOnce class="w-full flex items-center justify-center flex-col mt-20 px-5">
-    <MainInfo title="Météo" icon="sun" degrees="20" weather="Ensoleillé" />
-    <MoreInfoContainer />
+    <MainInfo selectedDay="0" />
+    <MoreInfoContainer selectedDay="0" />
     <DayContainer />
   </main>
   <main v-else class="w-full px-5 flex items-center justify-center" id="welcome">
