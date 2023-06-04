@@ -6,36 +6,46 @@ import { useWeatherDataStore } from '@/stores/weatherData';
 import { storeToRefs } from 'pinia';
 
 const weather = useWeatherDataStore();
-const { currentWeather } = storeToRefs(weather);
+const { weatherDataWeekly } = storeToRefs(weather);
+const props = defineProps(['selectedDay'])
+
 
 const infoList = reactive([
 	{
 		name: 'Vent',
-		value: `${currentWeather?.value?.wind?.speed?.toFixed(0)} km/h`,
+		value: `${weatherDataWeekly?.value[props.selectedDay]?.wind?.speed} km/h`,
 		icon: 'compass',
-		degree: currentWeather?.value?.wind?.deg,
+		degree: weatherDataWeekly?.value[props.selectedDay]?.wind?.deg,
 	},
-	{ name: 'Humidité', value: `${currentWeather?.value?.humidity}%`, icon: 'tint' },
+	{ name: 'Humidité', value: `${weatherDataWeekly?.value[props.selectedDay]?.humidity}%`, icon: 'tint' },
 	{ 
 		icon: 'sun', 
-		name: currentWeather?.value?.sun?.sunset < Date.now() ? 'Coucher du soleil' : 'Lever du soleil', 
-		value: currentWeather?.value?.sun?.sunset < Date.now() ? format(fromUnixTime(currentWeather?.value?.sun?.sunset ?? 0), "HH'h'mm") : format(fromUnixTime(currentWeather?.value?.sun?.sunrise ?? 0), "HH'h'mm") 
+		name: weatherDataWeekly?.value[props.selectedDay]?.sun?.sunset < Date.now() ? 'Coucher du soleil' : 'Lever du soleil', 
+		value: weatherDataWeekly?.value[props.selectedDay]?.sun?.sunset < Date.now() ? format(fromUnixTime(weatherDataWeekly?.value[props.selectedDay]?.sun?.sunset ?? 0), "HH'h'mm") : format(fromUnixTime(weatherDataWeekly?.value[props.selectedDay]?.sun?.sunrise ?? 0), "HH'h'mm") 
 	}
 ]);
 
-watch(currentWeather.value, (newWeather) => {
-	infoList[0].value = `${newWeather.wind.speed.toFixed(0)} km/h`;
-	infoList[0].degree = newWeather.degree;
-	infoList[1].value = `${newWeather.humidity}%`;
+watch(weatherDataWeekly, (newWeather) => {
+	updateInfoList(newWeather);
+});
 
-	if (newWeather.sun.sunset < Date.now()) {
+watch(props, () => {
+	updateInfoList(weatherDataWeekly.value);
+});
+
+const updateInfoList = (newWeather) => {
+	infoList[0].value = `${newWeather[props.selectedDay].wind.speed} km/h`;
+	infoList[0].degree = newWeather[props.selectedDay].wind.deg;
+	infoList[1].value = `${newWeather[props.selectedDay].humidity}%`;
+
+	if (newWeather[props.selectedDay].sun.sunset < Date.now()) {
 		infoList[2].name = 'Coucher du soleil';
-		infoList[2].value = format(fromUnixTime(newWeather.sun.sunset), "HH'h'mm");
+		infoList[2].value = format(fromUnixTime(newWeather[props.selectedDay].sun.sunset), "HH'h'mm");
 	} else {
 		infoList[2].name = 'Lever du soleil';
-		infoList[2].value = format(fromUnixTime(newWeather.sun.sunrise), "HH'h'mm");
+		infoList[2].value = format(fromUnixTime(newWeather[props.selectedDay].sun.sunrise), "HH'h'mm");
 	}
-});
+}
 
 
 </script>

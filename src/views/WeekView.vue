@@ -6,6 +6,7 @@ import { useWeatherDataStore } from '@/stores/weatherData';
 import { storeToRefs } from 'pinia';
 
 const weather = useWeatherDataStore();
+const { selectedDay } = storeToRefs(weather);
 
 </script>
 
@@ -21,8 +22,8 @@ const weather = useWeatherDataStore();
       </RouterLink>
       <h1 class="text-4xl font-bold">Cette semaine</h1>
     </span>
-    <MainInfo orientation="horizontal" cityName="Demain"/>
-    <MoreInfoContainer />
+    <MainInfo orientation="horizontal" :selectedDay="selectedDay" />
+    <MoreInfoContainer :selectedDay="selectedDay" />
     <WeeklyWeatherContainer />
   </main>
 </template>

@@ -1,5 +1,8 @@
 <script setup>
-defineProps(['name', 'value', 'icon', 'degree', 'img'])
+import { watch } from 'vue';
+
+const props = defineProps(['name', 'value', 'icon', 'degree', 'img'])
+
 </script>
 
 <template>

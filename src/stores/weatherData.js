@@ -9,16 +9,14 @@ export const useWeatherDataStore = defineStore('weatherData', () => {
 
 	const weatherDataHourly = ref({});
 	const weatherDataHourlyArray = ref([]);
-	const weatherDataWeekly = ref({});
-	const weatherDataWeeklyArray = ref([]);
+	const weatherDataWeekly = ref([]);
 
 	const loading = ref(false);
 	const error = ref(null);
 	const location = useRoute();
 	const loadedOnce = ref(false);
-	const selectedDay = reactive({
-		index: 0,
-	});
+	const selectedDay = ref(0);
+	let response;
 
     const currentWeather = reactive({
         cityName: '',
@@ -34,37 +32,6 @@ export const useWeatherDataStore = defineStore('weatherData', () => {
 	} else {
 		console.log('API key found');
 	}
-
-	/**
-	 * Récupérer les données météo d'une ville
-	 * @param city Ville dont on veut les données météo
-	 */
-	const fetchWeatherData = async (city) => {
-		loading.value = true;
-		loadedOnce.value = true;
-		try {
-			const res = await fetch(
-				`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=fr`
-			);
-			weatherData.value = await res.json();
-			currentWeather.cityName = weatherData.value.name;
-			currentWeather.weatherArray = weatherData.value.weather[0];
-			currentWeather.temperature = weatherData.value.main.temp.toFixed(0);
-			currentWeather.wind = weatherData.value.wind;
-			currentWeather.humidity = weatherData.value.main.humidity;
-			currentWeather.sun = {
-				sunrise: weatherData.value.sys.sunrise,
-				sunset: weatherData.value.sys.sunset,
-			};
-		} catch (err) {
-			error.value = err;
-		} finally {
-			loading.value = false;
-			if (location.name !== 'accueil') {
-				router.push('/');
-			}
-		}
-	};
 
 	/**
 	 * Récupérer les données météo d'une ville pour les 5 prochaines heures
@@ -98,30 +65,43 @@ export const useWeatherDataStore = defineStore('weatherData', () => {
 	 * @param city Ville dont on veut les données météo
 	 */
 	const fetchWeatherDataWeekly = async (city) => {
+		loadedOnce.value = true;
 		loading.value = true;
         try {
 			const res = await fetch(
 				`https://api.openweathermap.org/data/2.5/forecast/daily?q=${city}&appid=${apiKey}&units=metric&lang=fr`
 			);
-			console.log(await res.json())
-			weatherDataWeeklyArray.value = await res.json();
+			response = await res.json();
 		} catch (err) {
 			error.value = err;
 		}
-
-		for (let i = 0; i < weatherDataWeeklyArray.value.list.length; i++) {
-			let date = new Date(weatherDataWeeklyArray.value.list[i].dt * 1000);
-			weatherDataWeeklyArray.value.list[i] = {
+		for (let i = 0; i < response.list.length; i++) {
+			let date = new Date(response.list[i].dt * 1000);
+			response.list[i] = {
 				day:
 					i === 0
 						? "Aujourd'hui"
 						: date.toLocaleDateString('fr-FR', { weekday: 'long' }),
-				icon: weatherDataWeeklyArray.value.list[i].weather[0].icon,
-				description: weatherDataWeeklyArray.value.list[i].weather[0].description,
-				temp: weatherDataWeeklyArray.value.list[i].temp.day.toFixed(0),
+				cityName:  response.city.name,
+				icon: response.list[i].weather[0].icon,
+				description: response.list[i].weather[0].description,
+				temp: response.list[i].temp.day.toFixed(0),
+				humidity: response.list[i].humidity,
+				wind: {
+					speed: response.list[i].speed.toFixed(0),
+					deg: response.list[i].deg,
+				},
+				sun: {
+					sunrise: response.list[i].sunrise,
+					sunset: response.list[i].sunset,
+				},
 			};
 		}
-        weatherDataWeekly.value = weatherDataWeeklyArray.value.list;
+        weatherDataWeekly.value = await response.list;
+		loading.value = false;
+		if (location.name !== 'accueil') {
+			router.push('/');
+		}
 	};
 
 	/**
@@ -158,11 +138,9 @@ export const useWeatherDataStore = defineStore('weatherData', () => {
 		weatherDataHourly,
 		weatherDataHourlyArray,
 		weatherDataWeekly,
-		weatherDataWeeklyArray,
 		loading,
 		loadedOnce,
 		error,
-		fetchWeatherData,
 		fetchWeatherDataHourly,
 		fetchWeatherDataWeekly,
 		iconCodeToEmoji,
