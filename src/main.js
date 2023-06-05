@@ -1,20 +1,48 @@
-import './assets/main.css'
+import "./assets/main.css";
 
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faMagnifyingGlass, faBars, faWind, faTint, faChevronRight, faChevronLeft, faChevronDown, faChevronUp, faCompass, faSun, faMapMarkerAlt, faPaperPlane } from '@fortawesome/free-solid-svg-icons'
+import { createApp } from "vue";
+import { createPinia } from "pinia";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import {
+  faMagnifyingGlass,
+  faBars,
+  faWind,
+  faTint,
+  faChevronRight,
+  faChevronLeft,
+  faChevronDown,
+  faChevronUp,
+  faCompass,
+  faSun,
+  faMapMarkerAlt,
+  faPaperPlane,
+  faCircleNotch,
+} from "@fortawesome/free-solid-svg-icons";
 
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import App from './App.vue'
-import router from './router'
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import App from "./App.vue";
+import router from "./router";
 
-library.add(faMagnifyingGlass, faBars, faWind, faTint, faChevronRight, faChevronLeft, faChevronDown, faChevronUp, faCompass, faSun, faMapMarkerAlt, faPaperPlane)
+library.add(
+  faMagnifyingGlass,
+  faBars,
+  faWind,
+  faTint,
+  faChevronRight,
+  faChevronLeft,
+  faChevronDown,
+  faChevronUp,
+  faCompass,
+  faSun,
+  faMapMarkerAlt,
+  faPaperPlane,
+  faCircleNotch
+);
 
-const app = createApp(App)
+const app = createApp(App);
 
-app.use(createPinia())
-app.use(router)
-app.component('font-awesome-icon', FontAwesomeIcon)
+app.use(createPinia());
+app.use(router);
+app.component("font-awesome-icon", FontAwesomeIcon);
 
-app.mount('#app')
+app.mount("#app");

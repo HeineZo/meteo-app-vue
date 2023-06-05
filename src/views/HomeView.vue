@@ -7,7 +7,7 @@ import { storeToRefs } from "pinia";
 
 const weather = useWeatherDataStore();
 
-const { loadedOnce } = storeToRefs(weather);
+const { loadedOnce, loading } = storeToRefs(weather);
 
 
 function getCurrentPosition() {
@@ -38,7 +38,8 @@ function getCurrentPosition() {
     <div class="h-96 flex flex-col justify-center items-center gap-10 z-10 backdrop-blur-md">
       <h1 class="font-black md:text-9xl text-6xl uppercase text-center text-black">Météo du jour</h1>
       <h2 class="font-semibold md:text-3xl text-xl text-gray-400 text-center">Recherchez une ville ou utilisez votre position</h2>
-      <button class="rounded-xl bg-primary-300 px-5 py-2 font-bold hover:bg-primary-400" @click="getCurrentPosition()">
+      <font-awesome-icon v-if=loading icon="fa-circle-notch" class="animate-spin text-xl text-primary-500"></font-awesome-icon>
+      <button v-else class="rounded-xl bg-primary-300 px-5 py-2 font-bold hover:bg-primary-400" @click="getCurrentPosition()">
         <font-awesome-icon icon="map-marker-alt" class="mr-2" />
         Me localiser
       </button>

@@ -5,7 +5,7 @@
 <template>
   <main class="p-5 max-w-2xl m-auto min-h-screen flex flex-col sm:px-6 lg:px-8">
     <h1 class="text-4xl mb-5">Nous contacter</h1>
-    <form class="flex flex-col mx-auto w-full rounded-3xl p-2 shadow-2xl gap-5 items-center">
+    <form class="flex flex-col mx-auto w-full rounded-3xl p-2 gap-5 items-center">
       <input type="text" placeholder="Objet"
         class="text-base focus-visible:ring focus-visible:ring-primary-400 focus-visible:ring-opacity-75 focus:text-base py-2 px-4 w-full rounded-3xl focus:outline-none" />
       <input type="email"

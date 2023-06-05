@@ -30,6 +30,8 @@ export const useWeatherDataStore = defineStore("weatherData", () => {
   }
 
   const fetchCurrentPositionWeather = async (lat, lon) => {
+    loadedOnce.value = true;
+    loading.value = true;
     try {
       const res = await fetch(
         `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric&lang=fr`
@@ -52,7 +54,6 @@ export const useWeatherDataStore = defineStore("weatherData", () => {
    * @param city Ville dont on veut les données météo
    */
   const fetchWeatherDataHourly = async (city) => {
-    weatherDataHourlyArray.value = [];
     loading.value = true;
     try {
       const res = await fetch(
@@ -63,6 +64,7 @@ export const useWeatherDataStore = defineStore("weatherData", () => {
     } catch (err) {
       error.value = err;
     }
+    loading.value = false;
   };
 
   /**
